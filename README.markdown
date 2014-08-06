@@ -150,6 +150,8 @@ Além das URIs padrão do VRaptor o plugin aceita URIs com o locale no início, 
 
 # Tradução de rotas
 
+## Arquivos properties
+
 As rotas podem ser traduzidas adicionando um arquivo de propriedades para o locale com o nome <code>routes_{locale}.properties</code>.
 Para traduzir adicione as rotas com suas traduções no arquivo no formato chave/valor.
 
@@ -158,15 +160,39 @@ Exemplo de tradução para português brasileiro do locale padrão em inglês:
 *Conteúdo do arquivo <code>routes_pt_BR.properties</code>*:
 
 ```
-/controller/action/{param} = /controlador/acao/{param}
+/my/action/{param} = /meu/acao/{param}
 ```
 
-*Rotas que respondem a este controller/action*:
+## Annotation
+
+As rotas podem ser traduzidas adicionando a annotation @I18nPath às suas action e controller.
+A annotation é obrigatória na action, mas pode ser ignorada no controller, sendo considerada como absoluta apenas a rota da action neste caso.
+
+Exemplo de controller com rotas traduzidas:
 
 ```
-/controller/action/{param}
-/en-us/controller/action/{param}
-/pt-br/controlador/acao/{param}
+@Controller
+@Path("/my")
+@I18nPaths({@I18nPath(locale="pt-br", path="/meu")})
+public class MyController {
+
+	@Get("/action")
+	@I18nPath(locale="pt-br", path="/acao")
+	public void action() {
+	
+	}
+
+}
+```
+
+Caso exista apenas uma tradução pode ser informada apenas a annotation @I18nPath diretamente, como na assinatura do método action.
+
+*Rotas que respondem a estes controller/action (properties e annotation)*:
+
+```
+/my/action/{param}
+/en-us/my/action/{param}
+/pt-br/meu/acao/{param}
 ``` 
 
 Nota: Ter URLs diferentes para o mesmo conteúdo pode trazer efeitos negativos para SEO, então traduza apenas URLs que também 
